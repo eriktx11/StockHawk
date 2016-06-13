@@ -13,9 +13,9 @@ public class ResponseReceiver extends BroadcastReceiver
 public ResponseReceiver() {
 
 }
-
+    public static String BROADCAST_SEND_MSG = "broadcast_send_msg";
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "here?", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "OOps - Symbol doesn't exists !", Toast.LENGTH_LONG).show();
     }
 }

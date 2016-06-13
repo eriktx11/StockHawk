@@ -2,6 +2,7 @@ package com.sam_chordas.android.stockhawk.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.provider.SyncStateContract;
 import android.support.v4.content.LocalBroadcastManager;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.google.android.gms.gcm.Task;
 import com.google.android.gms.gcm.TaskParams;
 import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
+import com.sam_chordas.android.stockhawk.ui.ResponseReceiver;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,6 +22,8 @@ import java.util.TimerTask;
  * Created by sam_chordas on 10/1/15.
  */
 public class StockIntentService extends IntentService {
+
+    private ResponseReceiver receiver;
 
   public StockIntentService(){
     super(StockIntentService.class.getName());
@@ -36,24 +40,16 @@ public class StockIntentService extends IntentService {
     if (intent.getStringExtra("tag").equals("add")){
         args.putString("symbol", intent.getStringExtra("symbol"));
     }
-    // We can call OnRunTask from the intent service to force it to run immediately instead of
-    // scheduling a task.
-//      Utils Classquote = new Utils();
-//      ArrayList OBJresult = Classquote.quoteJsonToContentVals(getResponse);
-
-//      StockTaskService init = new StockTaskService();
-//      int afterTask = init.onRunTask(new TaskParams(intent.getStringExtra("tag"), args));
-//
-//      if(afterTask!=0)
-//      {
-//          intent.putExtra("n1", 1);
-//
-//      }else {Toast.makeText(getApplicationContext(), "Doesn't exist !", Toast.LENGTH_LONG).show();}
 
     int i = stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), args));
 
       if(i==-1) {
-          intent.putExtra("mmm", -1);
+          receiver = new ResponseReceiver();
+          Intent intentmsg = new Intent(ResponseReceiver.BROADCAST_SEND_MSG);
+          LocalBroadcastManager.getInstance(StockIntentService.this).registerReceiver(receiver, new IntentFilter(ResponseReceiver.BROADCAST_SEND_MSG));
+
+          LocalBroadcastManager.getInstance(StockIntentService.this).sendBroadcast(intentmsg);
+
       }
   }
 }

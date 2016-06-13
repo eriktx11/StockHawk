@@ -10,6 +10,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.SyncStateContract;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
@@ -57,12 +58,14 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   private Cursor mCursor;
   boolean isConnected;
 
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mContext = this;
     ConnectivityManager cm =
         (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+
 
     NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
     isConnected = activeNetwork != null &&
@@ -107,10 +110,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                         .input(R.string.input_hint, R.string.input_prefill, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
-                                // On FAB click, receive user input. Make sure the stock doesn't already exist
-                                // in the DB and proceed accordingly
 
-                                mServiceIntent.putExtra("mmm", 0);
                                 Cursor c = getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
                                         new String[]{QuoteColumns.SYMBOL}, QuoteColumns.SYMBOL + "= ?",
                                         new String[]{input.toString().toUpperCase()}, null);
@@ -125,37 +125,9 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
                                     mServiceIntent.putExtra("tag", "add");
                                     mServiceIntent.putExtra("symbol", input.toString());
-
-                                    //startService(mServiceIntent);
-
-                                    mServiceIntent.setAction("com.sam_chordas.android.stockhawk.ui");
-                                    //LocalBroadcastManager.getInstance(MyStocksActivity.this).
-                                    sendBroadcast(mServiceIntent);
-
-                                    //getBaseContext().startService(mServiceIntent);
-
-
-
-                                    int whatHappened = mServiceIntent.getIntExtra("mmm", -1);
-                                    if (whatHappened == -1) {
-                                        Toast toast =
-                                                Toast.makeText(MyStocksActivity.this, "This stock does not exists !",
-                                                        Toast.LENGTH_LONG);
-                                        toast.setGravity(Gravity.CENTER, Gravity.CENTER, 0);
-                                        toast.show();
-                                        mServiceIntent.putExtra("mmm", 0);
-                                    }
+                                    startService(mServiceIntent);
                                 }
-//                                 else {
-//                                    // Add the stock to DB
-//
-//                                    //mServiceIntent.putExtra("n1", 1);
-//
-//                                        mServiceIntent.putExtra("tag", "add");
-//                                        mServiceIntent.putExtra("symbol", input.toString());
-//                                        startService(mServiceIntent);
-//
-//                                    }
+
                                 }
 
                             }).show();
@@ -204,19 +176,9 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
       @Override
   public void onResume() {
     super.onResume();
-          LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
-                  new IntentFilter("my-event"));
     getLoaderManager().restartLoader(CURSOR_LOADER_ID, null, this);
   }
 
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Extract data included in the Intent
-            //String message = intent.getStringExtra("message");
-            Log.d("receiver", "Got message: " + "here");
-        }
-    };
 
 
   public void networkToast(){
