@@ -3,10 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.db.chart.view.LineChartView
-        xmlns:chart="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/linechart"
+
+    <com.github.mikephil.charting.charts.LineChart
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:id="@+id/chartID">
+    </com.github.mikephil.charting.charts.LineChart>
+
+    <!--<com.db.chart.view.LineChartView-->
+        <!--xmlns:chart="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/linechart"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
 
 </FrameLayout>

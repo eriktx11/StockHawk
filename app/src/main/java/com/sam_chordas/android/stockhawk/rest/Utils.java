@@ -9,6 +9,10 @@ import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +27,31 @@ public class Utils{
   private static String LOG_TAG = Utils.class.getSimpleName();
 
   public static boolean showPercent = true;
+
+
+    public static String currentDate() {
+
+        Date currentDate = Calendar.getInstance().getTime();
+        java.text.SimpleDateFormat simpleDateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        String formattedEndDate = simpleDateFormat.format(currentDate);
+        Calendar cal = Calendar.getInstance();
+        //cal.add(Calendar.MONTH, -1);
+        //String formattedStartDate = simpleDateFormat.format(cal.getTime());
+
+        return simpleDateFormat.format(cal.getTime());
+    }
+
+    public static String currentDateOneYearAgo(){
+        Date currentDate = Calendar.getInstance().getTime();
+        java.text.SimpleDateFormat simpleDateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        String formattedEndDate = simpleDateFormat.format(currentDate);
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.YEAR, -1);
+        //String formattedStartDate;
+
+        return simpleDateFormat.format(cal.getTime());
+    }
+
 
   public static ArrayList quoteJsonToContentVals(String JSON){
     ArrayList<ContentProviderOperation> batchOperations = new ArrayList<>();

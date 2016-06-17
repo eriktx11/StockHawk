@@ -19,6 +19,7 @@ import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import com.sam_chordas.android.stockhawk.rest.Utility;
 import com.sam_chordas.android.stockhawk.rest.Utils;
+import com.sam_chordas.android.stockhawk.ui.DetailActivity;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -72,7 +73,6 @@ public class StockTaskService extends GcmTaskService{
 //    @GET("/yql?&format=json&diagnostics=true&env=store://datatables.org/alltableswithkeys&callback=")
 //    void getHistory(@Query("q") String query, Callback<RetrievedResponse> callback );
 //  }
-
 
 
 
@@ -154,14 +154,9 @@ public class StockTaskService extends GcmTaskService{
             Utils Classquote = new Utils();
             ArrayList OBJresult = Classquote.quoteJsonToContentVals(getResponse);
 
-            if (OBJresult.size() == 0)
+            if (OBJresult.size() == 0 && !params.getTag().equals("history"))
             {
-
-//                again = new Intent(this, StockIntentService.class);
-//                again.putExtra("n1", 0);
-//                startService(again);
                 return -1;
-                // Toast.makeText(StockTaskService.this, getString(R.string.symbol_err_toast), Toast.LENGTH_LONG).show();
             }else {
 
               mContext.getContentResolver().applyBatch(QuoteProvider.AUTHORITY,
@@ -175,9 +170,63 @@ public class StockTaskService extends GcmTaskService{
       } catch (IOException e){
         e.printStackTrace();
       }
+
+        return result;
     }
 
-    return result;
+
+      if (params.getTag().equals("history")){
+
+          StringBuilder urlChartBuilder = new StringBuilder();
+
+          Cursor initChartCursor;
+
+          initChartCursor = mContext.getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
+                  new String[] { "Distinct " + QuoteColumns.SYMBOL }, null,
+                  null, null);
+
+
+          urlChartBuilder.append("https://query.yahooapis.com/v1/public/yql?q=");
+          //https://query.yahooapis.com/v1/public/yql?q=select+*+from+yahoo
+          // .finance.historicaldata+where+symbol+%3D+"RIC"
+          // +and+startDate+%3D+"2015-04-02"+and+endDate+%3D+"2016-04-02"
+          // +&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=
+
+          String urlSChart;
+          String getResponseForChart;
+          int resultChart = GcmNetworkManager.RESULT_FAILURE;
+
+          try {// ... + initChartCursor.getString(1).toString() + ...
+              urlChartBuilder.append(URLEncoder.encode("select * from yahoo.finance.historicaldata " +
+                      "where symbol = \"" + params.getExtras().getString("symbol","") + "\" " +
+                      "and startDate = \"" + Utils.currentDateOneYearAgo() + "\" and endDate = \"" + Utils.currentDate() + "\" "
+                      , "UTF-8"));
+
+              urlChartBuilder.append("&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables."
+                      + "org%2Falltableswithkeys&callback=");
+
+
+              if (urlChartBuilder != null) {
+                  urlSChart = urlChartBuilder.toString();
+                  try {
+                      resultChart = GcmNetworkManager.RESULT_SUCCESS;
+                      getResponseForChart = fetchData(urlSChart);
+                  } catch (IOException e) {
+                      e.printStackTrace();
+                  }
+              }
+          } catch (UnsupportedEncodingException e) {
+              e.printStackTrace();
+          }
+
+
+          again = new Intent(StockTaskService.this, DetailActivity.class);
+          again.putExtra("history", "");
+          // ImageView imageView = (ImageView) v.findViewById(R.id.posterImg);
+          startActivity(again);
+
+      }
+      return result;
   }
 
 }

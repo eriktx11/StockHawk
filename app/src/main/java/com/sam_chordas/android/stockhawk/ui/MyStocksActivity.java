@@ -1,17 +1,13 @@
 package com.sam_chordas.android.stockhawk.ui;
 
 import android.app.LoaderManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.provider.SyncStateContract;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -19,13 +15,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.gcm.TaskParams;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
@@ -40,8 +38,10 @@ import com.google.android.gms.gcm.Task;
 import com.melnykov.fab.FloatingActionButton;
 import com.sam_chordas.android.stockhawk.touch_helper.SimpleItemTouchHelperCallback;
 
-public class MyStocksActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+import javax.security.auth.callback.Callback;
 
+public class MyStocksActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+//AppCompatActivity
   /**
    * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
    */
@@ -74,6 +74,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     // The intent service is for executing immediate pulls from the Yahoo API
     // GCMTaskService can only schedule tasks, they cannot execute immediately
     mServiceIntent = new Intent(this, StockIntentService.class);
+
     if (savedInstanceState == null){
       // Run the initialize task service so that some stocks appear upon an empty database
       mServiceIntent.putExtra("tag", "init");
@@ -84,6 +85,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
       }
     }
     RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
 
@@ -91,12 +93,17 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(this,
             new RecyclerViewItemClickListener.OnItemClickListener() {
               @Override public void onItemClick(View v, int position) {
-                //TODO:
-                // do something on item click
-              }
-            }));
-    recyclerView.setAdapter(mCursorAdapter);
 
+                  mCursor.moveToPosition(position);
+                  String symbol = mCursor.getString(mCursor.getColumnIndex("symbol"));
+                  mServiceIntent.putExtra("tag", "history");
+                  mServiceIntent.putExtra("symbol", symbol);
+
+                  startService(mServiceIntent);
+              }
+                }));
+
+    recyclerView.setAdapter(mCursorAdapter);
 
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
     fab.attachToRecyclerView(recyclerView);
@@ -114,6 +121,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                                 Cursor c = getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
                                         new String[]{QuoteColumns.SYMBOL}, QuoteColumns.SYMBOL + "= ?",
                                         new String[]{input.toString().toUpperCase()}, null);
+
                                 if (c.getCount() != 0) {
                                     Toast toast =
                                             Toast.makeText(MyStocksActivity.this, "This stock is already saved!",
@@ -145,9 +153,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
         mItemTouchHelper.attachToRecyclerView(recyclerView);
 
-        mTitle=
-
-        getTitle();
+        mTitle=getTitle();
 
         if(isConnected)
 
