@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.gcm.TaskParams;
+import com.sam_chordas.android.stockhawk.ui.DetailActivity;
 import com.sam_chordas.android.stockhawk.ui.ResponseReceiver;
 
 /**
@@ -39,10 +40,24 @@ public class StockIntentService extends IntentService {
 
       if (intent.getStringExtra("tag").equals("history"))
       {
-
           Bundle bundleH = new Bundle();
           bundleH.putString("symbol", intent.getStringExtra("symbol"));
           stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), bundleH));
+
+          Intent again = new Intent (this, DetailActivity.class);
+
+          intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
+
+
+//          again = intent;
+
+  //        startActivity(again);
+//
+//          receiver = new ResponseReceiver();
+//          Intent intentmsg = new Intent(DetailActivity.BROADCAST_CHART_MSG);
+//          LocalBroadcastManager.getInstance(StockIntentService.this).registerReceiver(receiver, new IntentFilter(DetailActivity.BROADCAST_CHART_MSG));
+//          LocalBroadcastManager.getInstance(StockIntentService.this).sendBroadcast(intentmsg);
+
       }
 
 

@@ -2,6 +2,8 @@ package com.sam_chordas.android.stockhawk.ui;
 
 import android.app.Fragment;
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -9,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.google.android.gms.gcm.TaskParams;
@@ -18,22 +21,29 @@ import com.sam_chordas.android.stockhawk.service.StockTaskService;
 /**
  * Created by erikllerena on 6/13/16.
  */
-public class DetailActivity extends ActionBarActivity {
+public class DetailActivity extends ActionBarActivity{
 
 
     LineChart lineChart;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_line_graph);
 
-        savedInstanceState = getIntent().getExtras();
+        Intent intent = getIntent();
+        String history = intent.getParcelableExtra("history");
+
+
         if (savedInstanceState != null) {
-            String value = savedInstanceState.getString("new_variable_name");
-        }
-        //TODO make the graph
+                String value = savedInstanceState.getString("history");
+            }
+
     }
+        //TODO make the graph
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

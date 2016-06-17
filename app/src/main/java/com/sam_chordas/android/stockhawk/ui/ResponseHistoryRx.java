@@ -5,20 +5,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
 /**
- * Created by erikllerena on 6/12/16.
+ * Created by erikllerena on 6/16/16.
  */
-public class ResponseReceiver extends BroadcastReceiver
+public class ResponseHistoryRx extends BroadcastReceiver
 {
-public ResponseReceiver() {
+    public ResponseHistoryRx() {
 
-}
+    }
+
     public static String BROADCAST_SEND_MSG = "broadcast_send_msg";
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Toast.makeText(context, "OOps - Symbol doesn't exists !", Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, "From History Rx", Toast.LENGTH_LONG).show();
+
+        intent = new Intent(context, DetailActivity.class);
+
+
     }
 }

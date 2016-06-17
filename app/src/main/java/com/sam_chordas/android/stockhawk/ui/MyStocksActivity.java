@@ -51,6 +51,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
    */
   private CharSequence mTitle;
   private Intent mServiceIntent;
+    private Intent again;
   private ItemTouchHelper mItemTouchHelper;
   private static final int CURSOR_LOADER_ID = 0;
   private QuoteCursorAdapter mCursorAdapter;
@@ -59,7 +60,12 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   boolean isConnected;
 
 
-  @Override
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mContext = this;
@@ -98,8 +104,10 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                   String symbol = mCursor.getString(mCursor.getColumnIndex("symbol"));
                   mServiceIntent.putExtra("tag", "history");
                   mServiceIntent.putExtra("symbol", symbol);
-
                   startService(mServiceIntent);
+
+                  again = new Intent(getApplicationContext(), DetailActivity.class);
+                  startActivity(again);
               }
                 }));
 

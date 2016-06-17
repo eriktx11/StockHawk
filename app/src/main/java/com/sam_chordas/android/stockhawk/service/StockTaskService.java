@@ -171,7 +171,6 @@ public class StockTaskService extends GcmTaskService{
         e.printStackTrace();
       }
 
-        return result;
     }
 
 
@@ -193,12 +192,12 @@ public class StockTaskService extends GcmTaskService{
           // +&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=
 
           String urlSChart;
-          String getResponseForChart;
+          String getResponseForChart="";
           int resultChart = GcmNetworkManager.RESULT_FAILURE;
 
           try {// ... + initChartCursor.getString(1).toString() + ...
               urlChartBuilder.append(URLEncoder.encode("select * from yahoo.finance.historicaldata " +
-                      "where symbol = \"" + params.getExtras().getString("symbol","") + "\" " +
+                      "where symbol = \"" + params.getExtras().getString("symbol") + "\" " +
                       "and startDate = \"" + Utils.currentDateOneYearAgo() + "\" and endDate = \"" + Utils.currentDate() + "\" "
                       , "UTF-8"));
 
@@ -220,10 +219,10 @@ public class StockTaskService extends GcmTaskService{
           }
 
 
-          again = new Intent(StockTaskService.this, DetailActivity.class);
-          again.putExtra("history", "");
+          //again = new Intent(this, DetailActivity.class);
+          params.getExtras().putString("history", getResponseForChart);
           // ImageView imageView = (ImageView) v.findViewById(R.id.posterImg);
-          startActivity(again);
+          //startActivity(again);
 
       }
       return result;
