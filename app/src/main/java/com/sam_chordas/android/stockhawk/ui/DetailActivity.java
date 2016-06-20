@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.google.android.gms.gcm.GcmTaskService;
 import com.google.android.gms.gcm.TaskParams;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.service.StockTaskService;
@@ -21,10 +23,25 @@ import com.sam_chordas.android.stockhawk.service.StockTaskService;
 /**
  * Created by erikllerena on 6/13/16.
  */
-public class DetailActivity extends ActionBarActivity{
+public class DetailActivity extends ActionBarActivity {
 
 
     LineChart lineChart;
+
+    Bundle args = new Bundle();
+    Intent intent;
+
+    protected void onHandleIntent(Intent intent) {
+        Log.d(DetailActivity.class.getSimpleName(), "Stock Intent Service");
+        StockTaskService stockTaskService = new StockTaskService(this);
+
+        args.putString("symbol", intent.getStringExtra("symbol"));
+        stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), args));
+
+    }
+
+
+
 
 
     @Override
@@ -33,20 +50,21 @@ public class DetailActivity extends ActionBarActivity{
 
         setContentView(R.layout.activity_line_graph);
 
-        Intent intent = getIntent();
+        intent = getIntent();
+
+        onHandleIntent(intent);
+
         String history = intent.getParcelableExtra("history");
-        String symbol = intent.getParcelableExtra("symbol");
-        String tag = intent.getParcelableExtra("tag");
-
-        //String history = intent.getStringExtra("history");
 
 
-        if (savedInstanceState != null) {
-                String value = savedInstanceState.getString("history");
+        if (args != null) {
+                String value = args.getString("history");
             }
 
     }
-        //TODO make the graph
+
+
+
 
 
     @Override

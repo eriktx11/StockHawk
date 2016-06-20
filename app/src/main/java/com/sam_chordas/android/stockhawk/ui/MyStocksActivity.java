@@ -102,11 +102,13 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
                   mCursor.moveToPosition(position);
                   String symbol = mCursor.getString(mCursor.getColumnIndex("symbol"));
-                  mServiceIntent.putExtra("tag", "history");
-                  mServiceIntent.putExtra("symbol", symbol);
-                  startService(mServiceIntent);
+                  //mServiceIntent.putExtra("tag", "history");
+                  //mServiceIntent.putExtra("symbol", symbol);
+                  //startService(mServiceIntent);
 
                   again = new Intent(getApplicationContext(), DetailActivity.class);
+                  again.putExtra("tag", "history");
+                  again.putExtra("symbol", symbol);
                   startActivity(again);
               }
                 }));
