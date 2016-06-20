@@ -35,6 +35,10 @@ public class DetailActivity extends ActionBarActivity{
 
         Intent intent = getIntent();
         String history = intent.getParcelableExtra("history");
+        String symbol = intent.getParcelableExtra("symbol");
+        String tag = intent.getParcelableExtra("tag");
+
+        //String history = intent.getStringExtra("history");
 
 
         if (savedInstanceState != null) {

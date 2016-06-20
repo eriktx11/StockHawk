@@ -40,9 +40,9 @@ public class StockIntentService extends IntentService {
 
       if (intent.getStringExtra("tag").equals("history"))
       {
-          Bundle bundleH = new Bundle();
-          bundleH.putString("symbol", intent.getStringExtra("symbol"));
-          stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), bundleH));
+          //Bundle bundleH = new Bundle();
+          args.putString("symbol", intent.getStringExtra("symbol"));
+          stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), args));
 
           Intent again = new Intent (this, DetailActivity.class);
 

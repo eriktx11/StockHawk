@@ -39,6 +39,9 @@ import java.util.ArrayList;
 public class StockTaskService extends GcmTaskService{
   private String LOG_TAG = StockTaskService.class.getSimpleName();
 
+  public static final String ACTION_DATA_UPDATED =
+            "com.sam_chordas.android.stockhawk.ACTION_DATA_UPDATED";
+
   private OkHttpClient client = new OkHttpClient();
   private Context mContext;
   private StringBuilder mStoredSymbols = new StringBuilder();
@@ -59,21 +62,15 @@ public class StockTaskService extends GcmTaskService{
     Response response = client.newCall(request).execute();
     return response.body().string();
   }
-  //query = "select * from yahoo.finance.historicaldata where symbol = \'YHOO\' and startDate = \'2009-09-11\' and endDate = \'2010-03-10\'";
 
-//  You need also to append the following parameters to the url:
-//
-//          &format=json
-//  &diagnostics=true
-//          &env=store://datatables.org/alltableswithkeys
-//          &callback=
 
-//One solution could be adding those parameters in the Retrofit service, like this:
-//  public interface RetrieveHistoryService {
-//    @GET("/yql?&format=json&diagnostics=true&env=store://datatables.org/alltableswithkeys&callback=")
-//    void getHistory(@Query("q") String query, Callback<RetrievedResponse> callback );
-//  }
-
+    private void updateWidgets() {
+        Context context = mContext;
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
+                .setPackage(context.getPackageName());
+        context.sendBroadcast(dataUpdatedIntent);
+    }
 
 
   @Override
@@ -137,7 +134,7 @@ public class StockTaskService extends GcmTaskService{
     String getResponse;
     int result = GcmNetworkManager.RESULT_FAILURE;
 
-    if (urlStringBuilder != null){
+    if ((urlStringBuilder != null) && params.getTag().equals("add")){
       urlString = urlStringBuilder.toString();
       try{
         getResponse = fetchData(urlString);
@@ -171,6 +168,7 @@ public class StockTaskService extends GcmTaskService{
         e.printStackTrace();
       }
 
+        updateWidgets();
     }
 
 
@@ -221,6 +219,7 @@ public class StockTaskService extends GcmTaskService{
 
           //again = new Intent(this, DetailActivity.class);
           params.getExtras().putString("history", getResponseForChart);
+          //params.getExtras().putSerializable("history", getResponseForChart);
           // ImageView imageView = (ImageView) v.findViewById(R.id.posterImg);
           //startActivity(again);
 

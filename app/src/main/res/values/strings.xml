@@ -11,6 +11,7 @@
   <string name="symbol_search_again">Search Again</string>
   <string name="input_hint">FB</string>
   <string name="input_prefill"></string>
+    <string name="title_widget_detail">Stock Hawk</string>
   <string name="network_toast">Uh-oh! This app requires an internet connection</string>
   <string name="symbol_err_toast">Uh-oh! symbol does not exist </string>
 </resources>
