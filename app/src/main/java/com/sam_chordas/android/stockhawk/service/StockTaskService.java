@@ -19,6 +19,7 @@ import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import com.sam_chordas.android.stockhawk.rest.Utility;
 import com.sam_chordas.android.stockhawk.rest.Utils;
+import com.sam_chordas.android.stockhawk.ui.AppPreferences;
 import com.sam_chordas.android.stockhawk.ui.DetailActivity;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -47,7 +48,9 @@ public class StockTaskService extends GcmTaskService{
   private StringBuilder mStoredSymbols = new StringBuilder();
   private boolean isUpdate;
 
-    private Intent again;
+  private Intent again;
+
+  private AppPreferences sPref;
 
   public StockTaskService(){}
 
@@ -178,6 +181,9 @@ public class StockTaskService extends GcmTaskService{
 
       if (params.getTag().equals("history")){
 
+          sPref = new AppPreferences(mContext);
+          sPref.saveSmsBody("symbol", params.getExtras().getString("symbol"));
+
           StringBuilder urlChartBuilder = new StringBuilder();
 
           Cursor initChartCursor;
@@ -221,8 +227,11 @@ public class StockTaskService extends GcmTaskService{
           }
 
 
+
+          sPref.saveSmsBody(params.getExtras().getString("symbol"), getResponseForChart);
+
           //again = new Intent(this, DetailActivity.class);
-          params.getExtras().putString("history", getResponseForChart);
+          //params.getExtras().putString("history", getResponseForChart);
           //params.getExtras().putSerializable("history", getResponseForChart);
           // ImageView imageView = (ImageView) v.findViewById(R.id.posterImg);
           //startActivity(again);

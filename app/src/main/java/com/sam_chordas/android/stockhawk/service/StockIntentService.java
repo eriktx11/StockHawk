@@ -35,17 +35,21 @@ public class StockIntentService extends IntentService {
     if (intent.getStringExtra("tag").equals("add")){
         args.putString("symbol", intent.getStringExtra("symbol"));
     }
-//      if (intent.getStringExtra("tag").equals("history"))
-//      {
-//          //Bundle bundleH = new Bundle();
-//          args.putString("symbol", intent.getStringExtra("symbol"));
-//          stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), args));
-//
-//         // Intent again = new Intent (this, DetailActivity.class);
-//
-//          intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//      }
+
+
+      if (intent.getStringExtra("tag").equals("history"))
+      {
+          //Bundle bundleH = new Bundle();
+          args.putString("symbol", intent.getStringExtra("symbol"));
+          stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), args));
+
+
+//          intent = new Intent (this, DetailActivity.class);
+          intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
+//          startActivity(intent);
+         // return;
+
+      }
 
       i = stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), args));
 
@@ -57,7 +61,5 @@ public class StockIntentService extends IntentService {
           LocalBroadcastManager.getInstance(StockIntentService.this).sendBroadcast(intentmsg);
 
       }
-
-
   }
 }

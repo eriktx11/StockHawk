@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import static android.support.v4.app.ActivityCompat.startActivity;
+
 /**
  * Created by erikllerena on 6/16/16.
  */
@@ -19,9 +21,6 @@ public class ResponseHistoryRx extends BroadcastReceiver
     public void onReceive(Context context, Intent intent) {
 
         //Toast.makeText(context, "From History Rx", Toast.LENGTH_LONG).show();
-
-        intent = new Intent(context, DetailActivity.class);
-
 
     }
 }

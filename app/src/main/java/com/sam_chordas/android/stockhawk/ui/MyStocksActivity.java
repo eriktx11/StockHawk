@@ -58,7 +58,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   private Context mContext;
   private Cursor mCursor;
   boolean isConnected;
-
+  private AppPreferences sPref;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -95,6 +95,8 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
 
+    sPref = new AppPreferences(mContext);
+
     mCursorAdapter = new QuoteCursorAdapter(this, null);
     recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(this,
             new RecyclerViewItemClickListener.OnItemClickListener() {
@@ -102,12 +104,12 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
                   mCursor.moveToPosition(position);
                   String symbol = mCursor.getString(mCursor.getColumnIndex("symbol"));
-                  //mServiceIntent.putExtra("tag", "history");
-                  //mServiceIntent.putExtra("symbol", symbol);
-                  //startService(mServiceIntent);
+                  mServiceIntent.putExtra("tag", "history");
 
-                  again = new Intent(getApplicationContext(), DetailActivity.class);
-                  again.putExtra("tag", "history");
+
+//                  startService(mServiceIntent);
+
+                  again = new Intent(mContext, DetailActivity.class);
                   again.putExtra("symbol", symbol);
                   startActivity(again);
               }
@@ -115,9 +117,12 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
     recyclerView.setAdapter(mCursorAdapter);
 
+
+
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
     fab.attachToRecyclerView(recyclerView);
     fab.setOnClickListener(new View.OnClickListener() {
+
         @Override
         public void onClick(View v) {
             if (isConnected) {
