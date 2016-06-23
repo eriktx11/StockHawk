@@ -1,6 +1,8 @@
 package com.sam_chordas.android.stockhawk.ui;
 
 import android.app.LoaderManager;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -37,6 +39,7 @@ import com.google.android.gms.gcm.PeriodicTask;
 import com.google.android.gms.gcm.Task;
 import com.melnykov.fab.FloatingActionButton;
 import com.sam_chordas.android.stockhawk.touch_helper.SimpleItemTouchHelperCallback;
+import com.sam_chordas.android.stockhawk.widget.DetailWidgetProvider;
 
 import javax.security.auth.callback.Callback;
 
@@ -54,6 +57,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     private Intent again;
   private ItemTouchHelper mItemTouchHelper;
   private static final int CURSOR_LOADER_ID = 0;
+    private static final int CURSOR_LOADER_ID_SID = 1;
   private QuoteCursorAdapter mCursorAdapter;
   private Context mContext;
   private Cursor mCursor;
@@ -250,12 +254,23 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
         QuoteColumns.ISCURRENT + " = ?",
         new String[]{"1"},
         null);
+
+
   }
 
   @Override
   public void onLoadFinished(Loader<Cursor> loader, Cursor data){
     mCursorAdapter.swapCursor(data);
     mCursor = data;
+
+//      ComponentName name = new ComponentName(this, DetailWidgetProvider.class);
+//      int [] ids = AppWidgetManager.getInstance(this).getAppWidgetIds(name);
+//
+//      Intent intent = new Intent(this,DetailWidgetProvider.class);
+//      intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//      intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+//      sendBroadcast(intent);
+
   }
 
   @Override

@@ -7,12 +7,18 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+import android.widget.TextView;
 
 import com.sam_chordas.android.stockhawk.R;
+import com.sam_chordas.android.stockhawk.data.QuoteColumns;
+import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+import com.sam_chordas.android.stockhawk.touch_helper.ItemTouchHelperViewHolder;
 
 import java.util.concurrent.ExecutionException;
 
@@ -23,6 +29,9 @@ import java.util.concurrent.ExecutionException;
 public class DetailWidgetRemoteViewsService extends RemoteViewsService {
     public final String LOG_TAG = DetailWidgetRemoteViewsService.class.getSimpleName();
 
+//    public final TextView symbol;
+//    public final TextView bidPrice;
+//    public final TextView change;
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
@@ -43,16 +52,20 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
                 // However, our ContentProvider is not exported so it doesn't have access to the
                 // data. Therefore we need to clear (and finally restore) the calling identity so
                 // that calls use our process and permission
-//                final long identityToken = Binder.clearCallingIdentity();
-//                String location = Utility.getPreferredLocation(DetailWidgetRemoteViewsService.this);
-//                Uri weatherForLocationUri = WeatherContract.WeatherEntry
-//                        .buildWeatherLocationWithStartDate(location, System.currentTimeMillis());
-//                data = getContentResolver().query(weatherForLocationUri,
-//                        FORECAST_COLUMNS,
-//                        null,
-//                        null,
-//                        WeatherContract.WeatherEntry.COLUMN_DATE + " ASC");
-//                Binder.restoreCallingIdentity(identityToken);
+                final long identityToken = Binder.clearCallingIdentity();
+
+                data = getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
+                        new String[]{ QuoteColumns._ID, QuoteColumns.SYMBOL, QuoteColumns.BIDPRICE,
+                                QuoteColumns.PERCENT_CHANGE, QuoteColumns.CHANGE, QuoteColumns.ISUP},
+                        QuoteColumns.ISCURRENT + " = ?",
+                        new String[]{"1"},
+                        null);
+
+
+
+
+
+                Binder.restoreCallingIdentity(identityToken);
             }
 
             @Override
@@ -70,67 +83,47 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
 
             @Override
             public RemoteViews getViewAt(int position) {
+
                 if (position == AdapterView.INVALID_POSITION ||
                         data == null || !data.moveToPosition(position)) {
                     return null;
                 }
+
                 RemoteViews views = new RemoteViews(getPackageName(),
-                        R.layout.activity_my_stocks);
-//                int weatherId = data.getInt(INDEX_WEATHER_CONDITION_ID);
-//                int weatherArtResourceId = Utility.getIconResourceForWeatherCondition(weatherId);
-//                Bitmap weatherArtImage = null;
-//                if ( !Utility.usingLocalGraphics(DetailWidgetRemoteViewsService.this) ) {
-//                    String weatherArtResourceUrl = Utility.getArtUrlForWeatherCondition(
-//                            DetailWidgetRemoteViewsService.this, weatherId);
-//                    try {
-//                        weatherArtImage = Glide.with(DetailWidgetRemoteViewsService.this)
-//                                .load(weatherArtResourceUrl)
-//                                .asBitmap()
-//                                .error(weatherArtResourceId)
-//                                .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get();
-//                    } catch (InterruptedException | ExecutionException e) {
-//                        Log.e(LOG_TAG, "Error retrieving large icon from " + weatherArtResourceUrl, e);
-//                    }
-//                }
-//                String description = data.getString(INDEX_WEATHER_DESC);
-//                long dateInMillis = data.getLong(INDEX_WEATHER_DATE);
-//                String formattedDate = Utility.getFriendlyDayString(
-//                        DetailWidgetRemoteViewsService.this, dateInMillis, false);
-//                double maxTemp = data.getDouble(INDEX_WEATHER_MAX_TEMP);
-//                double minTemp = data.getDouble(INDEX_WEATHER_MIN_TEMP);
-//                String formattedMaxTemperature =
-//                        Utility.formatTemperature(DetailWidgetRemoteViewsService.this, maxTemp);
-//                String formattedMinTemperature =
-//                        Utility.formatTemperature(DetailWidgetRemoteViewsService.this, minTemp);
-//                if (weatherArtImage != null) {
-//                    views.setImageViewBitmap(R.id.widget_icon, weatherArtImage);
-//                } else {
-//                    views.setImageViewResource(R.id.widget_icon, weatherArtResourceId);
-//                }
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-//                    setRemoteContentDescription(views, description);
-//                }
-//                views.setTextViewText(R.id.widget_date, formattedDate);
-//                views.setTextViewText(R.id.widget_description, description);
-//                views.setTextViewText(R.id.widget_high_temperature, formattedMaxTemperature);
-//                views.setTextViewText(R.id.widget_low_temperature, formattedMinTemperature);
-//
-//                final Intent fillInIntent = new Intent();
-//                String locationSetting =
-//                        Utility.getPreferredLocation(DetailWidgetRemoteViewsService.this);
-//                Uri weatherUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
-//                        locationSetting,
-//                        dateInMillis);
-//                fillInIntent.setData(weatherUri);
-//                views.setOnClickFillInIntent(R.id.widget_list_item, fillInIntent);
+                        R.layout.widget_detail_list_item);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                    setRemoteContentDescription(views, "stocks");
+                }
+
+//                symbol = (TextView) findViewById(R.id.stock_symbol);
+//                bidPrice = (TextView) itemView.findViewById(R.id.bid_price);
+//                change = (TextView) itemView.findViewById(R.id.change);
+
+//                viewHolder.symbol.setText(data.getString(data.getColumnIndex("symbol")));
+//                viewHolder.bidPrice.setText(data.getString(data.getColumnIndex("bid_price")));
+                views.setTextViewText(R.id.stock_symbol, data.getString(data.getColumnIndex("symbol")));
+                views.setTextViewText(R.id.bid_price, data.getString(data.getColumnIndex("bid_price")));
+                views.setTextViewText(R.id.change, data.getString(data.getColumnIndex("change")));
+
+
+                final Intent fillInIntent = new Intent();
+
+                fillInIntent.setData(QuoteProvider.Quotes.CONTENT_URI);
+                views.setOnClickFillInIntent(R.id.tapWidId, fillInIntent);
+                //views.setOnClickFillInIntent(R.id.stock_symbol, fillInIntent);
+
                 return views;
             }
 
-
+            @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
+            private void setRemoteContentDescription(RemoteViews views, String description) {
+                views.setContentDescription(R.id.stock_symbol, description);
+            }
 
             @Override
             public RemoteViews getLoadingView() {
-                return new RemoteViews(getPackageName(), R.layout.activity_my_stocks);
+                return new RemoteViews(getPackageName(), R.layout.widget_detail_list_item);
             }
 
             @Override
@@ -141,7 +134,7 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
             @Override
             public long getItemId(int position) {
                 if (data.moveToPosition(position))
-                    return data.getLong(1);
+                    return data.getColumnIndex("_id"); //column index
                 return position;
             }
 

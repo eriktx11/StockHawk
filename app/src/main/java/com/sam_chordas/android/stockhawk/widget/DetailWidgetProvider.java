@@ -24,12 +24,12 @@ import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // Perform this loop procedure for each App Widget that belongs to this provider
         for (int appWidgetId : appWidgetIds) {
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.activity_my_stocks);
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_detail);
 
             // Create an Intent to launch MainActivity
             Intent intent = new Intent(context, MyStocksActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-            views.setOnClickPendingIntent(R.id.recycler_view, pendingIntent);
+            views.setOnClickPendingIntent(R.id.widget, pendingIntent);
 
             // Set up the collection
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -45,8 +45,8 @@ import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
             PendingIntent clickPendingIntentTemplate = TaskStackBuilder.create(context)
                     .addNextIntentWithParentStack(clickIntentTemplate)
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-            views.setPendingIntentTemplate(R.id.recycler_view, clickPendingIntentTemplate);
-           // views.setEmptyView(R.id.widget_list, R.id.widget_empty);
+            views.setPendingIntentTemplate(R.id.widget_list, clickPendingIntentTemplate);
+
 
             // Tell the AppWidgetManager to perform an update on the current app widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -60,7 +60,7 @@ import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
                     new ComponentName(context, getClass()));
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.recycler_view);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list);
         }
     }
 
@@ -71,7 +71,7 @@ import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
      */
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void setRemoteAdapter(Context context, @NonNull final RemoteViews views) {
-        views.setRemoteAdapter(R.id.recycler_view,
+        views.setRemoteAdapter(R.id.widget_list,
                 new Intent(context, DetailWidgetRemoteViewsService.class));
     }
 
@@ -82,7 +82,7 @@ import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
      */
     @SuppressWarnings("deprecation")
     private void setRemoteAdapterV11(Context context, @NonNull final RemoteViews views) {
-        views.setRemoteAdapter(0, R.id.recycler_view,
+        views.setRemoteAdapter(0, R.id.widget_list,
                 new Intent(context, DetailWidgetRemoteViewsService.class));
     }
 }

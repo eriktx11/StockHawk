@@ -16,8 +16,8 @@
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:tools="http://schemas.android.com/tools"
-                    android:initialKeyguardLayout="@layout/activity_my_stocks"
-                    android:initialLayout="@layout/activity_my_stocks"
+                    android:initialKeyguardLayout="@layout/widget_detail"
+                    android:initialLayout="@layout/widget_detail"
                     android:minHeight="180dp"
                     android:minResizeHeight="180dp"
                     android:minResizeWidth="220dp"

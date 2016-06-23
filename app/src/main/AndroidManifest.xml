@@ -22,8 +22,8 @@
 
         <receiver
             android:name=".widget.DetailWidgetProvider"
-            android:label="@string/title_widget_detail"
-            android:enabled="@bool/use_detail_activity" >
+            android:label="@string/title_widget_detail">
+            <!--android:enabled="@bool/use_detail_activity" >-->
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.sam_chordas.android.stockhawk.ACTION_DATA_UPDATED" />
@@ -33,19 +33,16 @@
         </receiver>
 
 
-
-
-
-
+        <!--android:enabled="@bool/use_detail_activity"-->
         <service
-            android:name=".service.WidgetTaskService"
-            android:enabled="@bool/use_detail_activity"
+            android:name=".widget.DetailWidgetRemoteViewsService"
+
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
 
         <service
-            android:name=".ResponseReceiver"
+            android:name=".ui.ResponseReceiver"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
