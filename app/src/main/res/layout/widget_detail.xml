@@ -23,21 +23,22 @@
     <FrameLayout
         android:id="@+id/widget"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/abc_action_bar_default_height_material"
-        android:background="@color/md_divider_white">
+        android:layout_height="wrap_content"
+        android:background="@color/md_divider_white"
+        android:layout_gravity="center_horizontal">
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:contentDescription="@string/app_name"
             android:layout_gravity="center"
-            android:src="@drawable/common_plus_signin_btn_icon_light"
+            android:src="@mipmap/tophawk"
             />
     </FrameLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/material_blue_500">
+        android:background="@color/md_divider_black">
         <ListView
             android:id="@+id/widget_list"
             android:layout_width="match_parent"

@@ -21,8 +21,8 @@ public class AppPreferences {
         this._prefsEditor = _sharedPrefs.edit();
     }
 
-    public String getSmsBody(String MovieId) {
-        return _sharedPrefs.getString(MovieId, "");
+    public String getSmsBody(String symbol) {
+        return _sharedPrefs.getString(symbol, "");
     }
 
     public int getIngBody() {

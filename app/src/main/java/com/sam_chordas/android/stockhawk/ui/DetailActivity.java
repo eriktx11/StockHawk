@@ -63,7 +63,7 @@ public class DetailActivity extends ActionBarActivity {
 
     LineChart lineChart;
 
-    AppPreferences sPref;
+    AppPreferences _sPref;
     Bundle args = new Bundle();
     Intent intent;
 
@@ -76,14 +76,15 @@ public class DetailActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_line_graph);
 
-        sPref = new AppPreferences(getApplicationContext());
+        _sPref = new AppPreferences(getApplicationContext());
         //intent = getIntent();
 
 //        onHandleIntent(intent);
 
         lineChart = (LineChart) findViewById(R.id.chartID);
 
-        new FetchStockList().execute(sPref.getSmsBody("symbol"));
+        String symbol = _sPref.getSmsBody("symbol");
+        new FetchStockList().execute(symbol);
 
     }
 

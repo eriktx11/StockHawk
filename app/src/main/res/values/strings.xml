@@ -1,9 +1,9 @@
 <resources>
-  <string name="app_name">Stock Hawk</string>
+  <string name="app_name" translatable="false">Stock Hawk</string>
 
   <string name="action_example">Example action</string>
 
-  <string name="action_settings">Settings</string>
+  <string name="action_settings" translatable="false">Settings</string>
   <string name="action_change_units">Change Units</string>
   <string name="symbol_search">Symbol Search</string>
   <string name="content_test">Search for a Stock Symbol</string>
@@ -11,7 +11,7 @@
   <string name="symbol_search_again">Search Again</string>
   <string name="input_hint">FB</string>
   <string name="input_prefill"></string>
-    <string name="title_widget_detail">Stock Hawk</string>
+    <string name="title_widget_detail" translatable="false">Stock Hawk</string>
   <string name="network_toast">Uh-oh! This app requires an internet connection</string>
   <string name="symbol_err_toast">Uh-oh! symbol does not exist </string>
 </resources>

@@ -62,7 +62,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   private Context mContext;
   private Cursor mCursor;
   boolean isConnected;
-  private AppPreferences sPref;
+  private AppPreferences _sPref;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -99,7 +99,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
 
-    sPref = new AppPreferences(mContext);
+    _sPref = new AppPreferences(mContext);
 
     mCursorAdapter = new QuoteCursorAdapter(this, null);
     recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(this,
@@ -115,6 +115,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
                   again = new Intent(mContext, DetailActivity.class);
                   again.putExtra("symbol", symbol);
+                  _sPref.saveSmsBody("symbol", symbol);
                   startActivity(again);
               }
                 }));
