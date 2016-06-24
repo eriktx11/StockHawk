@@ -10,7 +10,9 @@
   <string name="content_test_again">Symbold does not exists !!</string>
   <string name="symbol_search_again">Search Again</string>
   <string name="input_hint">FB</string>
+    <string name="stock_symbol" translatable="false">GOOG</string>
   <string name="input_prefill"></string>
+    <string name="add_btn">add</string>
     <string name="title_widget_detail" translatable="false">Stock Hawk</string>
   <string name="network_toast">Uh-oh! This app requires an internet connection</string>
   <string name="symbol_err_toast">Uh-oh! symbol does not exist </string>

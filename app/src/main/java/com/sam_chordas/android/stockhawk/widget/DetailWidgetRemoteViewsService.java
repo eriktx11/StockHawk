@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+import com.sam_chordas.android.stockhawk.rest.QuoteCursorAdapter;
 import com.sam_chordas.android.stockhawk.touch_helper.ItemTouchHelperViewHolder;
 
 import java.util.concurrent.ExecutionException;
@@ -32,6 +33,7 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
 //    public final TextView symbol;
 //    public final TextView bidPrice;
 //    public final TextView change;
+
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
@@ -81,9 +83,13 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
                 return data == null ? 0 : data.getCount();
             }
 
+
+
+            RecyclerView.ViewHolder viewHolder;
+            TextView textView;
+
             @Override
             public RemoteViews getViewAt(int position) {
-
                 if (position == AdapterView.INVALID_POSITION ||
                         data == null || !data.moveToPosition(position)) {
                     return null;
@@ -93,7 +99,7 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
                         R.layout.widget_detail_list_item);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-                    setRemoteContentDescription(views, "stocks");
+                    setRemoteContentDescription(views, data.getString(data.getColumnIndex("symbol")));
                 }
 
 //                symbol = (TextView) findViewById(R.id.stock_symbol);
@@ -102,7 +108,9 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
 
 //                viewHolder.symbol.setText(data.getString(data.getColumnIndex("symbol")));
 //                viewHolder.bidPrice.setText(data.getString(data.getColumnIndex("bid_price")));
+
                 views.setTextViewText(R.id.stock_symbol, data.getString(data.getColumnIndex("symbol")));
+                setRemoteContentDescription(views, data.getString(data.getColumnIndex("symbol")) );
                 views.setTextViewText(R.id.bid_price, data.getString(data.getColumnIndex("bid_price")));
                 views.setTextViewText(R.id.change, data.getString(data.getColumnIndex("change")));
 

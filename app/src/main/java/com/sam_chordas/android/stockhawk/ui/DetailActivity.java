@@ -58,7 +58,7 @@ import java.util.Vector;
 /**
  * Created by erikllerena on 6/13/16.
  */
-public class DetailActivity extends ActionBarActivity {
+public class DetailActivity extends ActionBarActivity{
     private String LOG_TAG = DetailActivity.class.getSimpleName();
 
     LineChart lineChart;
@@ -277,10 +277,11 @@ public class DetailActivity extends ActionBarActivity {
         }
 
 
-//        @Override
-//        protected void onPostExecute(String[] result) {
-//
-//        }
+        @Override
+        protected void onPostExecute(String[] result) {
+            super.onPostExecute(result);
+            lineChart.invalidate();
+        }
 
     }
 }
