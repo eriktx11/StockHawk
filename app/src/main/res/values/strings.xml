@@ -12,8 +12,29 @@
   <string name="input_hint">FB</string>
     <string name="stock_symbol" translatable="false">GOOG</string>
   <string name="input_prefill"></string>
-    <string name="add_btn">add</string>
+    <string name="add_btn">add new stock</string>
     <string name="title_widget_detail" translatable="false">Stock Hawk</string>
   <string name="network_toast">Uh-oh! This app requires an internet connection</string>
+
   <string name="symbol_err_toast">Uh-oh! symbol does not exist </string>
+
+    <string name="tag" translatable="false">tag</string>
+    <string name="sms_body" translatable="false">sms_body</string>
+    <string name="selection" translatable="false">selction</string>
+    <string name="periodic" translatable="false">periodic</string>
+    <string name="add" translatable="false">add</string>
+    <string name="init" translatable="false">init</string>
+    <string name="symbol" translatable="false">symbol</string>
+    <string name="history" translatable="false">history</string>
+    <string name="results" translatable="false">results</string>
+    <string name="query" translatable="false">query</string>
+    <string name="quote" translatable="false">quote</string>
+    <string name="Adj_Close" translatable="false">Adj_Close</string>
+
+    <string name="already_saved">This stock is already saved!</string>
+    <string name="error_w_stream">Error closing stream</string>
+    <string name="sis">Stock Intent Service</string>
+    <string name="errbi">Error applying batch insert</string>
+
+
 </resources>

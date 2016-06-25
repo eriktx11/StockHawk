@@ -74,7 +74,7 @@ public class WidgetIntentService extends IntentService {
 
 //                viewHolder.symbol.setText(data.getString(data.getColumnIndex("symbol")));
 //                viewHolder.bidPrice.setText(data.getString(data.getColumnIndex("bid_price")));
-            views.setTextViewText(R.id.stock_symbol, data.getString(data.getColumnIndex("symbol")));
+            views.setTextViewText(R.id.stock_symbol, data.getString(data.getColumnIndex(getResources().getString(R.string.symbol))));
             views.setTextViewText(R.id.bid_price, data.getString(data.getColumnIndex("bid_price")));
 
 

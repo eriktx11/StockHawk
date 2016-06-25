@@ -10,6 +10,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -144,7 +145,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
                                 if (c.getCount() != 0) {
                                     Toast toast =
-                                            Toast.makeText(MyStocksActivity.this, "This stock is already saved!",
+                                            Toast.makeText(MyStocksActivity.this, R.string.already_saved,
                                                     Toast.LENGTH_LONG);
                                     toast.setGravity(Gravity.CENTER, Gravity.CENTER, 0);
                                     toast.show();
@@ -212,10 +213,16 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   }
 
   public void restoreActionBar() {
-    ActionBar actionBar = getSupportActionBar();
-    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-    actionBar.setDisplayShowTitleEnabled(true);
-    actionBar.setTitle(mTitle);
+
+      AppBarLayout actionBar = (AppBarLayout) findViewById(R.id.app_bar_layout);
+      actionBar.setVisibility(AppBarLayout.VISIBLE);
+      //actionBar.(true);
+      //actionBar.(mTitle);
+
+//    ActionBar actionBar = getSupportActionBar();
+//    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+//    actionBar.setDisplayShowTitleEnabled(true);
+//    actionBar.setTitle(mTitle);
   }
 
   @Override

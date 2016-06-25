@@ -166,7 +166,7 @@ public class StockTaskService extends GcmTaskService{
                   }
 
               } catch (RemoteException | OperationApplicationException e) {
-                  Log.e(LOG_TAG, "Error applying batch insert", e);
+                  Log.e(LOG_TAG, getResources().getString(R.string.errbi), e);
               }
 
           } catch (IOException e) {
@@ -228,7 +228,7 @@ public class StockTaskService extends GcmTaskService{
 
 
 
-          sPref.saveSmsBody(params.getExtras().getString("symbol"), getResponseForChart);
+          sPref.saveSmsBody(params.getExtras().getString("history"), getResponseForChart);
 
           //again = new Intent(this, DetailActivity.class);
           //params.getExtras().putString("history", getResponseForChart);

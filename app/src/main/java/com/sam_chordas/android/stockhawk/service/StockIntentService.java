@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.gcm.TaskParams;
+import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.ui.DetailActivity;
 import com.sam_chordas.android.stockhawk.ui.ResponseReceiver;
 
@@ -28,7 +29,7 @@ public class StockIntentService extends IntentService {
   }
 
   @Override protected void onHandleIntent(Intent intent) {
-    Log.d(StockIntentService.class.getSimpleName(), "Stock Intent Service");
+    Log.d(StockIntentService.class.getSimpleName(), getResources().getString(R.string.sis));
     StockTaskService stockTaskService = new StockTaskService(this);
     Bundle args = new Bundle();
     int i;
@@ -51,7 +52,7 @@ public class StockIntentService extends IntentService {
 
       }
 
-      i = stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), args));
+      i = stockTaskService.onRunTask(new TaskParams( intent.getStringExtra( "tag" ), args) );
 
       if (i == -1) {
           receiver = new ResponseReceiver();

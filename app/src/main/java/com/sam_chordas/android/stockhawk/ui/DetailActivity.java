@@ -83,7 +83,7 @@ public class DetailActivity extends ActionBarActivity{
 
         lineChart = (LineChart) findViewById(R.id.chartID);
 
-        String symbol = _sPref.getSmsBody("symbol");
+        String symbol = _sPref.getSmsBody(getResources().getString(R.string.symbol));
         new FetchStockList().execute(symbol);
 
     }
@@ -144,15 +144,15 @@ public class DetailActivity extends ActionBarActivity{
 
                 JSONObject chartDataObj = StockHistoryArray.getJSONObject(i);
 
-                yVals.add(new Entry(vals,(int) Float.parseFloat(chartDataObj.getString("Adj_Close")),i+1));
-
+                yVals.add(new Entry((int) Float.parseFloat(chartDataObj.getString("Adj_Close")),i+1));
+                //yVals.add(new Entry(vals,(int) Float.parseFloat(chartDataObj.getString("Adj_Close")),i+1));
                 xVals.add(i, String.valueOf(vals));
 
                 vals++;
 
             }
 
-           LineDataSet setting = new LineDataSet(yVals, "Stock Chart");
+           LineDataSet setting = new LineDataSet(yVals, "Stock Hawk");
 //            setting.setLineWidth(1.75f);
 //            setting.setCircleRadius(5f);
 //            setting.setCircleHoleRadius(2.5f);
@@ -262,7 +262,7 @@ public class DetailActivity extends ActionBarActivity{
                     try {
                         reader.close();
                     } catch (final IOException e) {
-                        Log.e(LOG_TAG, "Error closing stream", e);
+                        Log.e(LOG_TAG, getResources().getString(R.string.error_w_stream), e);
                     }
                 }
             }
