@@ -22,6 +22,7 @@ import com.sam_chordas.android.stockhawk.ui.MyStocksActivity;
 /**
  * Created by erikllerena on 6/22/16.
  */
+//unused class
 public class WidgetIntentService extends IntentService {
 
     public WidgetIntentService() {

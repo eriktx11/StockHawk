@@ -10,6 +10,8 @@ import static android.support.v4.app.ActivityCompat.startActivity;
 /**
  * Created by erikllerena on 6/16/16.
  */
+
+//unused class
 public class ResponseHistoryRx extends BroadcastReceiver
 {
     public ResponseHistoryRx() {

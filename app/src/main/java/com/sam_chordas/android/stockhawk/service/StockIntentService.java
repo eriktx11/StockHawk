@@ -44,17 +44,13 @@ public class StockIntentService extends IntentService {
           args.putString("symbol", intent.getStringExtra("symbol"));
           stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), args));
 
-
-//          intent = new Intent (this, DetailActivity.class);
           intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
-//          startActivity(intent);
-         // return;
 
       }
 
       i = stockTaskService.onRunTask(new TaskParams( intent.getStringExtra( "tag" ), args) );
 
-      if (i == -1) {
+      if (i == -1) {//This causes the Toast when stock symbol is invalid
           receiver = new ResponseReceiver();
           Intent intentmsg = new Intent(ResponseReceiver.BROADCAST_SEND_MSG);
           LocalBroadcastManager.getInstance(StockIntentService.this).registerReceiver(receiver, new IntentFilter(ResponseReceiver.BROADCAST_SEND_MSG));

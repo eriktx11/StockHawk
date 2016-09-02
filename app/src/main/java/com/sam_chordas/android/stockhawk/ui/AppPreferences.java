@@ -41,11 +41,13 @@ private Context context;
         _prefsEditor.apply();
     }
 
+    //not used in this app
     public void removePref(String MovieId) {
         _prefsEditor.remove(MovieId);
         _prefsEditor.apply();
     }
 
+    //not used in this app
     public Map<String, ?> getAll() {
         return _sharedPrefs.getAll();
     }

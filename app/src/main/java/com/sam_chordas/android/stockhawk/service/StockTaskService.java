@@ -157,8 +157,9 @@ public class StockTaskService extends GcmTaskService{
                   Utils Classquote = new Utils();
                   ArrayList OBJresult = Classquote.quoteJsonToContentVals(getResponse);
 
+                  //it OBJresult comes back empty that means the user entered a symbol that doesn't exist.
                   if (OBJresult.size() == 0 && !params.getTag().equals("history")) {
-                      return -1;
+                      return -1;//if stock doesn't exist it finishes and exits the code.
                   } else {
 
                       mContext.getContentResolver().applyBatch(QuoteProvider.AUTHORITY,
@@ -194,10 +195,6 @@ public class StockTaskService extends GcmTaskService{
 
 
           urlChartBuilder.append("https://query.yahooapis.com/v1/public/yql?q=");
-          //https://query.yahooapis.com/v1/public/yql?q=select+*+from+yahoo
-          // .finance.historicaldata+where+symbol+%3D+"RIC"
-          // +and+startDate+%3D+"2015-04-02"+and+endDate+%3D+"2016-04-02"
-          // +&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=
 
           String urlSChart;
           String getResponseForChart="";
@@ -226,15 +223,8 @@ public class StockTaskService extends GcmTaskService{
               e.printStackTrace();
           }
 
-
-
+          //so I can plot the history later
           sPref.saveSmsBody(params.getExtras().getString("history"), getResponseForChart);
-
-          //again = new Intent(this, DetailActivity.class);
-          //params.getExtras().putString("history", getResponseForChart);
-          //params.getExtras().putSerializable("history", getResponseForChart);
-          // ImageView imageView = (ImageView) v.findViewById(R.id.posterImg);
-          //startActivity(again);
 
           return 1;
 

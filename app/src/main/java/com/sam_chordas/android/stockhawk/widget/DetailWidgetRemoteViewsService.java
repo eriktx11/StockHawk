@@ -30,10 +30,6 @@ import java.util.concurrent.ExecutionException;
 public class DetailWidgetRemoteViewsService extends RemoteViewsService {
     public final String LOG_TAG = DetailWidgetRemoteViewsService.class.getSimpleName();
 
-//    public final TextView symbol;
-//    public final TextView bidPrice;
-//    public final TextView change;
-
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
@@ -56,16 +52,13 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
                 // that calls use our process and permission
                 final long identityToken = Binder.clearCallingIdentity();
 
+                //String[]{"1"} because the data is being duplicated in the data base.
                 data = getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
                         new String[]{ QuoteColumns._ID, QuoteColumns.SYMBOL, QuoteColumns.BIDPRICE,
                                 QuoteColumns.PERCENT_CHANGE, QuoteColumns.CHANGE, QuoteColumns.ISUP},
                         QuoteColumns.ISCURRENT + " = ?",
                         new String[]{"1"},
                         null);
-
-
-
-
 
                 Binder.restoreCallingIdentity(identityToken);
             }
@@ -82,7 +75,6 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
             public int getCount() {
                 return data == null ? 0 : data.getCount();
             }
-
 
 
             RecyclerView.ViewHolder viewHolder;
@@ -102,14 +94,8 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
                     setRemoteContentDescription(views, data.getString(data.getColumnIndex("symbol")));
                 }
 
-//                symbol = (TextView) findViewById(R.id.stock_symbol);
-//                bidPrice = (TextView) itemView.findViewById(R.id.bid_price);
-//                change = (TextView) itemView.findViewById(R.id.change);
-
-//                viewHolder.symbol.setText(data.getString(data.getColumnIndex("symbol")));
-//                viewHolder.bidPrice.setText(data.getString(data.getColumnIndex("bid_price")));
-
                 views.setTextViewText(R.id.stock_symbol, data.getString(data.getColumnIndex("symbol")));
+                //this is so the string can talk back to the impaired user.
                 setRemoteContentDescription(views, data.getString(data.getColumnIndex("symbol")) );
                 views.setTextViewText(R.id.bid_price, data.getString(data.getColumnIndex("bid_price")));
                 views.setTextViewText(R.id.change, data.getString(data.getColumnIndex("change")));
@@ -119,7 +105,6 @@ public class DetailWidgetRemoteViewsService extends RemoteViewsService {
 
                 fillInIntent.setData(QuoteProvider.Quotes.CONTENT_URI);
                 views.setOnClickFillInIntent(R.id.tapWidId, fillInIntent);
-                //views.setOnClickFillInIntent(R.id.stock_symbol, fillInIntent);
 
                 return views;
             }

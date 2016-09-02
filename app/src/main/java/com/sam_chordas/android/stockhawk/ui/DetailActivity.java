@@ -85,7 +85,6 @@ public class DetailActivity extends ActionBarActivity{
 
         String symbol = _sPref.getSmsBody(getResources().getString(R.string.symbol));
         new FetchStockList().execute(symbol);
-
     }
 
 
@@ -100,8 +99,7 @@ public class DetailActivity extends ActionBarActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        //int id = item.getItemId();
-
+        //needed to navigate back to main activity
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent intent = NavUtils.getParentActivityIntent(this);
@@ -109,43 +107,37 @@ public class DetailActivity extends ActionBarActivity{
                 NavUtils.navigateUpTo(this, intent);
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
 
-
-
-
+    //This asycTask is to retrieve all the stock symbol history.
     public class FetchStockList extends AsyncTask<String, Void, String[]> {
         private String LOG_TAG = FetchStockList.class.getSimpleName();
-
 
         private String[] getStockDataFromJson(String stockJsonStr)
                 throws JSONException {
 
-
+            //after receiving the stockJsonStr string, it is parsed in order to get its history
             JSONObject stockGroupJson = new JSONObject(stockJsonStr);
-            JSONObject stockGroupJsonQ=stockGroupJson.getJSONObject("query");
-            JSONObject stockGroupJsonR=stockGroupJsonQ.getJSONObject("results");
-            JSONArray StockHistoryArray=stockGroupJsonR.getJSONArray("quote");
+            JSONObject stockGroupJsonQ=stockGroupJson.getJSONObject("query");//move to stock header
+            JSONObject stockGroupJsonR=stockGroupJsonQ.getJSONObject("results");//move to result header
+            JSONArray StockHistoryArray=stockGroupJsonR.getJSONArray("quote");//move to price values
 
-            //lineChart[0].setScaleEnabled(true);
-            //LineData data = new LineData();
+
             ArrayList<Entry> yVals = new ArrayList<Entry>();
-
             ArrayList<String> xVals = new ArrayList<String>();
 
             float vals=0;
-            // GridItem item;
+
             String[] resultStrs = new String[StockHistoryArray.length()];
             for (int i = 0; i < StockHistoryArray.length(); i++) {
 
 
                 JSONObject chartDataObj = StockHistoryArray.getJSONObject(i);
 
-                yVals.add(new Entry((int) Float.parseFloat(chartDataObj.getString("Adj_Close")),i+1));
-                //yVals.add(new Entry(vals,(int) Float.parseFloat(chartDataObj.getString("Adj_Close")),i+1));
+                //building x and y values for the chart
+                yVals.add(new Entry(Float.parseFloat(chartDataObj.getString("Adj_Close")),i));
                 xVals.add(i, String.valueOf(vals));
 
                 vals++;
@@ -153,29 +145,14 @@ public class DetailActivity extends ActionBarActivity{
             }
 
            LineDataSet setting = new LineDataSet(yVals, "Stock Hawk");
-//            setting.setLineWidth(1.75f);
-//            setting.setCircleRadius(5f);
-//            setting.setCircleHoleRadius(2.5f);
-//            setting.setColor(Color.WHITE);
-//            setting.setCircleColor(Color.WHITE);
-//            setting.setHighLightColor(Color.WHITE);
-            //setting.setDrawValues(false);
-
-//            lineChart.setTouchEnabled(true);
-//            lineChart.setPinchZoom(true);
-//            lineChart.setViewPortOffsets(0, 10, 0, 10);
-
 
             ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
             dataSets.add(setting);
 
 
             LineData data = new LineData(xVals, dataSets);
-            //lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-            //lineChart.getXAxis().setLabelsToSkip(0);
 
             lineChart.setData(data);
-            //lineChart.setVisibleXRangeMaximum(155f);
 
             Legend l = lineChart.getLegend();
             l.setForm(Legend.LegendForm.LINE);
@@ -190,8 +167,6 @@ public class DetailActivity extends ActionBarActivity{
             y1.setTextColor(Color.WHITE);
             y1.setAxisMaxValue(120f);
             y1.setDrawGridLines(true);
-
-
 
             return null;
         }
@@ -218,8 +193,6 @@ public class DetailActivity extends ActionBarActivity{
 
                 urlChartBuilder.append("&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables."
                         + "org%2Falltableswithkeys&callback=");
-
-
 
 
                 URL url = new URL(urlChartBuilder.toString());

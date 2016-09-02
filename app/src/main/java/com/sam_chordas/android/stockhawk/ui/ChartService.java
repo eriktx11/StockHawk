@@ -39,6 +39,8 @@ import java.util.ArrayList;
 /**
  * Created by erikllerena on 6/13/16.
  */
+
+//unused class
 public class ChartService extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
@@ -53,6 +55,7 @@ public class ChartService extends Fragment implements LoaderManager.LoaderCallba
     public ChartService() {
         setHasOptionsMenu(true);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

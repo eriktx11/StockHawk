@@ -71,13 +71,14 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     }
 
     @Override
-  protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mContext = this;
     ConnectivityManager cm =
         (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
 
+    //ensure device is connected to the network
     NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
     isConnected = activeNetwork != null &&
         activeNetwork.isConnectedOrConnecting();
@@ -100,7 +101,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
 
-    _sPref = new AppPreferences(mContext);
+    _sPref = new AppPreferences(mContext);//initialize sharedPreferences
 
     mCursorAdapter = new QuoteCursorAdapter(this, null);
     recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(this,
@@ -112,8 +113,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                   mServiceIntent.putExtra("tag", "history");
 
 
-//                  startService(mServiceIntent);
-
+                  //sending the stock symbol to the AsyncAdaptar
                   again = new Intent(mContext, DetailActivity.class);
                   again.putExtra("symbol", symbol);
                   _sPref.saveSmsBody("symbol", symbol);
@@ -122,7 +122,6 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 }));
 
     recyclerView.setAdapter(mCursorAdapter);
-
 
 
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -152,6 +151,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                                     return;
                                 } else {
 
+                                    //go and add a new symbol in the list
                                     mServiceIntent.putExtra("tag", "add");
                                     mServiceIntent.putExtra("symbol", input.toString());
                                     startService(mServiceIntent);
@@ -216,13 +216,6 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
       AppBarLayout actionBar = (AppBarLayout) findViewById(R.id.app_bar_layout);
       actionBar.setVisibility(AppBarLayout.VISIBLE);
-      //actionBar.(true);
-      //actionBar.(mTitle);
-
-//    ActionBar actionBar = getSupportActionBar();
-//    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-//    actionBar.setDisplayShowTitleEnabled(true);
-//    actionBar.setTitle(mTitle);
   }
 
   @Override
@@ -255,30 +248,19 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
   @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args){
-    // This narrows the return to only the stocks that are most current.
+
     return new CursorLoader(this, QuoteProvider.Quotes.CONTENT_URI,
         new String[]{ QuoteColumns._ID, QuoteColumns.SYMBOL, QuoteColumns.BIDPRICE,
             QuoteColumns.PERCENT_CHANGE, QuoteColumns.CHANGE, QuoteColumns.ISUP},
         QuoteColumns.ISCURRENT + " = ?",
         new String[]{"1"},
         null);
-
-
   }
 
   @Override
   public void onLoadFinished(Loader<Cursor> loader, Cursor data){
     mCursorAdapter.swapCursor(data);
     mCursor = data;
-
-//      ComponentName name = new ComponentName(this, DetailWidgetProvider.class);
-//      int [] ids = AppWidgetManager.getInstance(this).getAppWidgetIds(name);
-//
-//      Intent intent = new Intent(this,DetailWidgetProvider.class);
-//      intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-//      intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-//      sendBroadcast(intent);
-
   }
 
   @Override
