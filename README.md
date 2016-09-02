@@ -2,7 +2,7 @@
 # Stock Hawk
 ### An android app that brings in a recycle list the price of stock symbols. Forked from [udacity](https://github.com/udacity/StockHawk)
 
-Upon forking this application the following activities were added:  
+The following activities were added to this app:  
 - Validation when symbol doesn't exists.
 - Detailed view to display historical data in a chart.  
 - Home screen widget to show list of stock symbols.
