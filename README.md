@@ -1,4 +1,4 @@
-[![API](https://img.shields.io/badge/API-23%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=23)
+[![API](https://img.shields.io/badge/API-15%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=15)
 # Stock Hawk
 ### An android app that brings in a recycle list the price of stock symbols. Forked from [udacity](https://github.com/udacity/StockHawk)
 
